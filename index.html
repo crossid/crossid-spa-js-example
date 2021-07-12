@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crossid SPA</title>
+  </head>
+  <body>
+    <div id="app">
+      <button id="login">Login</button>
+      <p id="profile"></p>
+    </div>
+
+    <script type="module">
+      import { initClient, login } from "./src/main.ts";
+      const crossid = await initClient();
+      document.getElementById("login").addEventListener("click", async () => {
+        await login(crossid);
+      });
+
+      const qp = new URLSearchParams(window.location.search);
+      if (qp.has("code")) {
+        await crossid.handleRedirectCallback();
+        window.history.replaceState(null, document.title, "/");
+      }
+
+      const user = await crossid.getUser();
+      if (user) {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("profile").innerHTML = `Hi ${user.name}`;
+      } else {
+        document.getElementById(
+          "profile"
+        ).innerHTML = `User is not authenticated, please login.`;
+      }
+    </script>
+  </body>
+</html>
