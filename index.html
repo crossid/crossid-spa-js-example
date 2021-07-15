@@ -27,7 +27,7 @@
       const user = await crossid.getUser();
       if (user) {
         document.getElementById("login").style.display = "none";
-        document.getElementById("profile").innerHTML = `Hi ${user.name}`;
+        document.getElementById("profile").innerHTML = JSON.stringify(user);
       } else {
         document.getElementById(
           "profile"
